@@ -1,0 +1,16 @@
+{
+  "offers": [
+    {
+      "fruit_id": "banana",
+      "amount_cny": 0,
+      "measure": "kg",
+      "location": "请填城市/门店",
+      "kind": "retail",
+      "observed_on": "2026-10-16",
+      "source_url": "https://替换成可核验的商品链接",
+      "source_note": "如为纸质价签或收据，写清证据存放位置与编号",
+      "package_kg": null,
+      "shipping_cny": 0
+    }
+  ]
+}

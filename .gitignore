@@ -5,6 +5,7 @@ __pycache__/
 *.egg-info/
 .venv/
 venv/
+.dist/
 build/
 dist/
 # Local user data and private inputs

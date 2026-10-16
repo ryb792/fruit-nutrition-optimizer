@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banana-banner.svg" width="850" alt="以香蕉为标志的水果营养成本优化项目" />
+<img src="assets/banana-banner.webp" width="850" alt="以香蕉为标志的水果营养成本优化项目" />
 
 # 🍌 Fruit Nutrition Optimizer
 
@@ -81,9 +81,9 @@ $$
 
 ## 安装 Agent Skill
 
-**GitHub 项目地址：** https://github.com/ryb792/fruit-nutrition-optimizer
+**GitHub 项目地址：** [https://github.com/ryb792/fruit-nutrition-optimizer](https://github.com/ryb792/fruit-nutrition-optimizer)
 
-本项目采用 **Agent Skills** 目录结构，以 `SKILL.md` 定义分析流程，并通过 `fruit_optimizer/`、`data/` 和 `references/` 提供可复算的数据与计算能力。安装入口、技能目录和可执行权限由实际使用的 Agent 平台决定。
+本项目采用 **Agent Skills** 目录结构，以 `SKILL.md` 定义分析流程，并通过 `fruit_optimizer/`、`data/` 和 `references/` 提供可复算的数据与计算能力。**安装入口、技能目录和可执行权限由实际使用的 Agent 平台决定**；并非所有 Agent 都支持直接安装或运行技能。
 
 ### 方式一：通过 Agent 安装
 
@@ -91,35 +91,43 @@ $$
 
 > 请从 https://github.com/ryb792/fruit-nutrition-optimizer 安装 `fruit-nutrition-optimizer` Agent Skill。
 >
-> 先检查仓库中的 `SKILL.md`、项目文件、依赖和相关安全风险。按当前 Agent 平台的官方 Skill 安装方式，将完整技能目录安装或导入到可用的技能位置，不要套用其他 Agent 的专属路径。
+> 先检查仓库中的 `SKILL.md`、项目文件、依赖和相关安全风险。按**当前 Agent 平台的官方 Skill 安装方式**，将完整技能目录安装或导入到可用的技能位置，不要套用其他 Agent 的专属路径。
 >
 > 保留 `SKILL.md`、`fruit_optimizer/`、`data/`、`references/`、`requirements.txt` 的相对目录结构。若环境支持 Python 3.11+ 和执行权限，请在合适的隔离环境安装依赖、运行 `python -m pytest tests -q`，并试用一次水果营养查询。
 >
 > 完成后报告实际安装或导入位置、技能是否可用、测试结果及是否需要重新加载。如果平台不支持自动安装、没有仓库访问权限或无法执行测试，请如实说明，并提供符合当前平台要求的手动安装步骤；不要声称未实际完成的操作已经成功。
 
-安装后，可直接提问：“**使用 fruit-nutrition-optimizer 分析猕猴桃的营养性价比**”或“**一周水果预算 30 元，怎样组合更经济？**”。
+安装后，可直接提问：“**使用 fruit-nutrition-optimizer 分析猕猴桃的营养性价比**”或“**一周水果预算 30 元，怎样组合更经济？**”。如未识别新技能，按所用平台的说明重新加载技能或会话。
 
 ### 方式二：手动导入技能目录
 
-1. 打开本仓库，选择 **Code → Download ZIP**，解压后保留完整项目目录。
+1. 打开 GitHub 项目地址，选择 **Code → Download ZIP**，解压后保留完整项目目录。
 2. 确认技能根目录存在 `SKILL.md`，并包含 `fruit_optimizer/`、`data/`、`references/` 和 `requirements.txt`。
-3. 按当前 Agent 平台的文档，将整个目录安装或导入至支持的 Agent Skills 位置。
-4. 按平台要求加载技能。若支持 Python 执行，安装依赖后可进行确定性的数值计算。
-5. 进行一次水果查询；若需预算组合优化，还应验证计算脚本能够运行。
+3. 在当前 Agent 平台的文档或设置中找到 **Skills / Agent Skills** 的安装入口、导入方式或技能目录，将**整个目录**导入。不同 Agent 的目录和权限要求可能不同，不存在通用的固定安装路径。
+4. 按平台要求加载技能。如环境支持 Python 执行，安装 `requirements.txt` 所列依赖后可以使用精确数值计算。
+5. 进行一次水果查询，确认技能已加载；需要预算组合优化时，还应验证计算脚本能够运行。
 
 完整说明见 [Agent Skill 安装指南](docs/INSTALL-SKILL.md)。
 
+### 使用示例
+
+> **香蕉和樱桃，哪一种补钾的实际成本更低？列出数据来源、可食率和计算公式。**
+
+> **一周水果预算 30 元，找出三种水果的低成本组合，并说明是否使用了模拟价格。**
+
+**价格说明：** 本 Skill 不会凭空生成实时零售价。请提供可核验的小票、价签或商品报价，或允许使用明确标注的假设情景；两者不得混淆。**精确数值求解需要 Python 及相应依赖与执行权限**，不能仅因 Agent 读取 `SKILL.md` 就宣称计算已经完成。
+
 ## 数据可信度
 
-- **营养数据：** 内置 8 种常见鲜果的 [USDA FoodData Central](https://fdc.nal.usda.gov/) SR Legacy 历史条目，附 FDC ID 和来源链接；不是所买水果的实测值。
-- **价格与可食率：** 优先采用可核验的实际售价；内置价格仅为**模拟演示**。部分可食率、储存期限是规划假设。
-- **适用范围：** 仅能在已纳入的水果候选中排名；缺失数据不会被当作零，不能随意把营养素合成为综合评分。
+- **营养数据：** 内置 8 种常见鲜果的 [USDA FoodData Central](https://fdc.nal.usda.gov/) SR Legacy 历史条目，附 FDC ID 和来源链接；不是用户所买水果的实测值。
+- **价格与可食率：** 优先采用可核验的实际售价；当前内置价格仅为**模拟演示**。部分可食率、储存期限是明确标注的规划假设。
+- **适用范围：** 目前仅能在已纳入的水果候选中排名；数据缺失不会被当作零，也不能把营养素直接叠加为未经验证的综合评分。
 
 详见 [数据来源与许可](DATA-LICENSE.md) 和 [计算规则](references/methodology.md)。
 
 ## 进阶使用与测试
 
-需要自建价格数据库、扩展水果条目或独立运行优化算法时，参阅 [开发者与命令行指南](docs/ADVANCED.md)。
+需要自建价格数据库、扩展水果条目或独立运行优化算法时，可使用 Python 3.11+ 命令行计算引擎。请阅读 [开发者与命令行指南](docs/ADVANCED.md)。
 
 ```bash
 python -m pip install -r requirements.txt
@@ -130,6 +138,6 @@ python -m pytest tests -q
 
 ## 开源协议
 
-项目代码采用 [MIT License](LICENSE)。第三方食物成分数据遵循各自的数据许可，不能因仓库采用 MIT 而被视为统一授权。欢迎通过 Issue / Pull Request 提供可追溯的数据与修正，参见 [贡献指南](CONTRIBUTING.md)。
+本项目代码采用 [MIT License](LICENSE)。食物成分数据及其他第三方资料遵循各自的数据许可，不能因仓库采用 MIT 而被视为统一授权。欢迎通过 Issue / Pull Request 提供可追溯的数据与修正，参见 [贡献指南](CONTRIBUTING.md)。
 
 *本 Skill 用于营养信息与采购成本分析，不构成医疗诊断或个体化膳食处方。*

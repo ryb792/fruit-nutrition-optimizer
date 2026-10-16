@@ -1,0 +1,10 @@
+{
+ "overrides": {
+   "banana": {
+     "edible_fraction": 0.65,
+     "extra_waste_fraction": 0.03,
+     "shelf_days": 4,
+     "source_note": "假设：实际应自行去皮称重；额外损耗为变质果肉"
+   }
+ }
+}

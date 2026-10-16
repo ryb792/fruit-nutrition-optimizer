@@ -1,0 +1,6 @@
+{
+  "disclaimer":"演示专用水果部分营养目标；并非成年人每日推荐摄入量，不代表饮食医学建议。",
+  "target_scope":"fruit_contribution_only",
+  "targets_per_day":{"vitamin_c_mg":30,"potassium_mg":450,"fiber_g":5},
+  "source":"User-selected illustrative scenario, NOT dietary reference intakes"
+}

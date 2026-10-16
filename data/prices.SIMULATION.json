@@ -1,0 +1,13 @@
+{
+  "disclaimer": "纯粹测试用的模拟价格，严禁当作当前市场报价",
+  "offers": [
+    {"fruit_id":"banana","amount_cny":6,"measure":"kg","location":"模拟市场","kind":"simulation","source_note":"虚构，仅演示"},
+    {"fruit_id":"cherry","amount_cny":60,"measure":"kg","location":"模拟市场","kind":"simulation","source_note":"虚构，仅演示"},
+    {"fruit_id":"apple","amount_cny":8,"measure":"kg","location":"模拟市场","kind":"simulation","source_note":"虚构，仅演示"},
+    {"fruit_id":"orange","amount_cny":7,"measure":"kg","location":"模拟市场","kind":"simulation","source_note":"虚构，仅演示"},
+    {"fruit_id":"kiwi_green","amount_cny":18,"measure":"kg","location":"模拟市场","kind":"simulation","source_note":"虚构，仅演示","package_kg":0.5},
+    {"fruit_id":"strawberry","amount_cny":25,"measure":"kg","location":"模拟市场","kind":"simulation","source_note":"虚构，仅演示","package_kg":0.25},
+    {"fruit_id":"pineapple","amount_cny":9,"measure":"kg","location":"模拟市场","kind":"simulation","source_note":"虚构，仅演示"},
+    {"fruit_id":"watermelon","amount_cny":3,"measure":"kg","location":"模拟市场","kind":"simulation","source_note":"虚构，仅演示"}
+  ]
+}

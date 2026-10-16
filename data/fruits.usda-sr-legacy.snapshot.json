@@ -1,0 +1,307 @@
+[
+  {
+    "id": "banana",
+    "name": "香蕉",
+    "aliases": [
+      "bananas",
+      "banana"
+    ],
+    "nutrition_per_100g_edible": {
+      "potassium_mg": 358,
+      "vitamin_c_mg": 8.7,
+      "vitamin_b6_mg": 0.367,
+      "fiber_g": 2.6,
+      "magnesium_mg": 27,
+      "energy_kcal": 89,
+      "sugar_g": 12.23,
+      "folate_ug": 20,
+      "calcium_mg": 5
+    },
+    "edible_fraction": 0.65,
+    "extra_waste_fraction": 0.0,
+    "shelf_days": 4,
+    "source": {
+      "dataset": "USDA FoodData Central - SR Legacy (April 2018)",
+      "record_id": "173944",
+      "url": "https://fdc.nal.usda.gov/food-details/173944/nutrients",
+      "data_type": "SR Legacy",
+      "retrieval_note": "手工摘录的公开食物成分数据，非自动实时同步；请访问FDC原条目核对，品种或产地可能不同",
+      "secondary_crosscheck": "https://whatyoueat.io/foods/173944"
+    },
+    "yield_source": {
+      "type": "planning_assumption",
+      "note": "可食率为粗略情景假设，未独立查证；应以当地品种称重或可靠的食部数据覆盖"
+    },
+    "shelf_source": {
+      "type": "planning_assumption",
+      "note": "存放天数假设，依储存条件和成熟度变化"
+    }
+  },
+  {
+    "id": "cherry",
+    "name": "甜樱桃",
+    "aliases": [
+      "樱桃",
+      "车厘子",
+      "sweet cherry",
+      "cherries"
+    ],
+    "nutrition_per_100g_edible": {
+      "potassium_mg": 222,
+      "vitamin_c_mg": 7,
+      "vitamin_b6_mg": 0.049,
+      "fiber_g": 2.1,
+      "magnesium_mg": 11,
+      "energy_kcal": 63,
+      "sugar_g": 12.82,
+      "folate_ug": 4,
+      "calcium_mg": 13
+    },
+    "edible_fraction": 0.9,
+    "extra_waste_fraction": 0.0,
+    "shelf_days": 5,
+    "source": {
+      "dataset": "USDA FoodData Central - SR Legacy (April 2018)",
+      "record_id": "171719",
+      "url": "https://fdc.nal.usda.gov/food-details/171719/nutrients",
+      "data_type": "SR Legacy",
+      "retrieval_note": "手工摘录的公开食物成分数据，非自动实时同步；请访问FDC原条目核对，品种或产地可能不同",
+      "secondary_crosscheck": "https://whatyoueat.io/foods/171719"
+    },
+    "yield_source": {
+      "type": "planning_assumption",
+      "note": "可食率为粗略情景假设，未独立查证；应以当地品种称重或可靠的食部数据覆盖"
+    },
+    "shelf_source": {
+      "type": "planning_assumption",
+      "note": "存放天数假设，依储存条件和成熟度变化"
+    }
+  },
+  {
+    "id": "apple",
+    "name": "苹果",
+    "aliases": [
+      "apple",
+      "apples"
+    ],
+    "nutrition_per_100g_edible": {
+      "potassium_mg": 107,
+      "vitamin_c_mg": 4.6,
+      "vitamin_b6_mg": 0.041,
+      "fiber_g": 2.4,
+      "magnesium_mg": 5,
+      "energy_kcal": 52,
+      "sugar_g": 10.39,
+      "folate_ug": 3,
+      "calcium_mg": 6
+    },
+    "edible_fraction": 0.9,
+    "extra_waste_fraction": 0.0,
+    "shelf_days": 14,
+    "source": {
+      "dataset": "USDA FoodData Central - SR Legacy (April 2018)",
+      "record_id": "171688",
+      "url": "https://fdc.nal.usda.gov/food-details/171688/nutrients",
+      "data_type": "SR Legacy",
+      "retrieval_note": "手工摘录的公开食物成分数据，非自动实时同步；请访问FDC原条目核对，品种或产地可能不同",
+      "secondary_crosscheck": "https://whatyoueat.io/foods/171688"
+    },
+    "yield_source": {
+      "type": "planning_assumption",
+      "note": "可食率为粗略情景假设，未独立查证；应以当地品种称重或可靠的食部数据覆盖"
+    },
+    "shelf_source": {
+      "type": "planning_assumption",
+      "note": "存放天数假设，依储存条件和成熟度变化"
+    }
+  },
+  {
+    "id": "orange",
+    "name": "橙子",
+    "aliases": [
+      "orange",
+      "oranges"
+    ],
+    "nutrition_per_100g_edible": {
+      "potassium_mg": 181,
+      "vitamin_c_mg": 53.2,
+      "vitamin_b6_mg": 0.06,
+      "fiber_g": 2.4,
+      "magnesium_mg": 10,
+      "energy_kcal": 47,
+      "sugar_g": 9.35,
+      "folate_ug": 30,
+      "calcium_mg": 40
+    },
+    "edible_fraction": 0.73,
+    "extra_waste_fraction": 0.0,
+    "shelf_days": 10,
+    "source": {
+      "dataset": "USDA FoodData Central - SR Legacy (April 2018)",
+      "record_id": "169097",
+      "url": "https://fdc.nal.usda.gov/food-details/169097/nutrients",
+      "data_type": "SR Legacy",
+      "retrieval_note": "手工摘录的公开食物成分数据，非自动实时同步；请访问FDC原条目核对，品种或产地可能不同",
+      "secondary_crosscheck": "https://whatyoueat.io/foods/169097"
+    },
+    "yield_source": {
+      "type": "planning_assumption",
+      "note": "可食率为粗略情景假设，未独立查证；应以当地品种称重或可靠的食部数据覆盖"
+    },
+    "shelf_source": {
+      "type": "planning_assumption",
+      "note": "存放天数假设，依储存条件和成熟度变化"
+    }
+  },
+  {
+    "id": "kiwi_green",
+    "name": "绿心猕猴桃",
+    "aliases": [
+      "猕猴桃",
+      "kiwi",
+      "kiwifruit"
+    ],
+    "nutrition_per_100g_edible": {
+      "potassium_mg": 312,
+      "vitamin_c_mg": 92.7,
+      "vitamin_b6_mg": 0.063,
+      "fiber_g": 3.0,
+      "magnesium_mg": 17,
+      "energy_kcal": 61,
+      "sugar_g": 8.99,
+      "folate_ug": 25,
+      "calcium_mg": 34
+    },
+    "edible_fraction": 0.76,
+    "extra_waste_fraction": 0.0,
+    "shelf_days": 7,
+    "source": {
+      "dataset": "USDA FoodData Central - SR Legacy (April 2018)",
+      "record_id": "168153",
+      "url": "https://fdc.nal.usda.gov/food-details/168153/nutrients",
+      "data_type": "SR Legacy",
+      "retrieval_note": "手工摘录的公开食物成分数据，非自动实时同步；请访问FDC原条目核对，品种或产地可能不同",
+      "secondary_crosscheck": "https://whatyoueat.io/foods/168153"
+    },
+    "yield_source": {
+      "type": "planning_assumption",
+      "note": "可食率为粗略情景假设，未独立查证；应以当地品种称重或可靠的食部数据覆盖"
+    },
+    "shelf_source": {
+      "type": "planning_assumption",
+      "note": "存放天数假设，依储存条件和成熟度变化"
+    }
+  },
+  {
+    "id": "strawberry",
+    "name": "草莓",
+    "aliases": [
+      "strawberry",
+      "strawberries"
+    ],
+    "nutrition_per_100g_edible": {
+      "potassium_mg": 153,
+      "vitamin_c_mg": 58.8,
+      "vitamin_b6_mg": 0.047,
+      "fiber_g": 2.0,
+      "magnesium_mg": 13,
+      "energy_kcal": 32,
+      "sugar_g": 4.89,
+      "folate_ug": 24,
+      "calcium_mg": 16
+    },
+    "edible_fraction": 0.94,
+    "extra_waste_fraction": 0.0,
+    "shelf_days": 3,
+    "source": {
+      "dataset": "USDA FoodData Central - SR Legacy (April 2018)",
+      "record_id": "167762",
+      "url": "https://fdc.nal.usda.gov/food-details/167762/nutrients",
+      "data_type": "SR Legacy",
+      "retrieval_note": "手工摘录的公开食物成分数据，非自动实时同步；请访问FDC原条目核对，品种或产地可能不同",
+      "secondary_crosscheck": "https://whatyoueat.io/foods/167762"
+    },
+    "yield_source": {
+      "type": "planning_assumption",
+      "note": "可食率为粗略情景假设，未独立查证；应以当地品种称重或可靠的食部数据覆盖"
+    },
+    "shelf_source": {
+      "type": "planning_assumption",
+      "note": "存放天数假设，依储存条件和成熟度变化"
+    }
+  },
+  {
+    "id": "pineapple",
+    "name": "菠萝",
+    "aliases": [
+      "pineapple"
+    ],
+    "nutrition_per_100g_edible": {
+      "potassium_mg": 109,
+      "vitamin_c_mg": 47.8,
+      "vitamin_b6_mg": 0.112,
+      "fiber_g": 1.4,
+      "magnesium_mg": 12,
+      "energy_kcal": 50,
+      "sugar_g": 9.85,
+      "folate_ug": 18,
+      "calcium_mg": 13
+    },
+    "edible_fraction": 0.51,
+    "extra_waste_fraction": 0.0,
+    "shelf_days": 5,
+    "source": {
+      "dataset": "USDA FoodData Central - SR Legacy (April 2018)",
+      "record_id": "169124",
+      "url": "https://fdc.nal.usda.gov/food-details/169124/nutrients",
+      "data_type": "SR Legacy",
+      "retrieval_note": "手工摘录的公开食物成分数据，非自动实时同步；请访问FDC原条目核对，品种或产地可能不同",
+      "secondary_crosscheck": "https://whatyoueat.io/foods/169124"
+    },
+    "yield_source": {
+      "type": "planning_assumption",
+      "note": "可食率为粗略情景假设，未独立查证；应以当地品种称重或可靠的食部数据覆盖"
+    },
+    "shelf_source": {
+      "type": "planning_assumption",
+      "note": "存放天数假设，依储存条件和成熟度变化"
+    }
+  },
+  {
+    "id": "watermelon",
+    "name": "西瓜",
+    "aliases": [
+      "watermelon"
+    ],
+    "nutrition_per_100g_edible": {
+      "potassium_mg": 112,
+      "vitamin_c_mg": 8.1,
+      "vitamin_b6_mg": 0.045,
+      "fiber_g": 0.4,
+      "magnesium_mg": 10,
+      "energy_kcal": 30,
+      "sugar_g": 6.2,
+      "folate_ug": 3,
+      "calcium_mg": 7
+    },
+    "edible_fraction": 0.52,
+    "extra_waste_fraction": 0.0,
+    "shelf_days": 4,
+    "source": {
+      "dataset": "USDA FoodData Central - SR Legacy (April 2018)",
+      "record_id": "167765",
+      "url": "https://fdc.nal.usda.gov/food-details/167765/nutrients",
+      "data_type": "SR Legacy",
+      "retrieval_note": "手工摘录的公开食物成分数据，非自动实时同步；请访问FDC原条目核对，品种或产地可能不同",
+      "secondary_crosscheck": "https://whatyoueat.io/foods/167765"
+    },
+    "yield_source": {
+      "type": "planning_assumption",
+      "note": "可食率为粗略情景假设，未独立查证；应以当地品种称重或可靠的食部数据覆盖"
+    },
+    "shelf_source": {
+      "type": "planning_assumption",
+      "note": "存放天数假设，依储存条件和成熟度变化"
+    }
+  }
+]
