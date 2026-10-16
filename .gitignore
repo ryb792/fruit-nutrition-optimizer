@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+# Local user data and private inputs
+data/prices.local.json
+data/fruits.custom.json
+*.env
+.env*
+# Output reports
+reports/
+*.log
+.DS_Store
