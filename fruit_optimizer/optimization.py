@@ -265,7 +265,9 @@ def plan(fruits:dict[str,Fruit],prices:dict[str,Price],*,days:int=7,
         for fid,g in daily.items():usedtotals[fid]+=g
     usedtypes={fid for fid,g in usedtotals.items() if g>=min_each-1e-4}
     if len(usedtypes)<min_fruit_types:raise RuntimeError('验收失败：水果种类不足')
-    sources=[{'fruit_id':f.id,'fdc_id':f.source['record_id'],'nutrition_url':f.source['url'],
+    sources=[{'fruit_id':f.id,'fdc_id':f.source['record_id'] if f.source['dataset'].startswith('USDA') else None,
+              'record_id':f.source['record_id'],'dataset':f.source['dataset'],
+              'nutrition_source':f.source,'nutrition_url':f.source['url'],
               'edible_yield_basis':f.yield_source,'price_kind':prices[f.id].kind,
               'price_date':prices[f.id].observed_on.isoformat() if prices[f.id].observed_on else None,
               'price_source_url':prices[f.id].source_url,'price_source_note':prices[f.id].source_note} for f in selected]
@@ -341,3 +343,4 @@ def execute_v11(args,fruits,prices):
         return {'samples':options,'sampled_nondominated':nondominated,
           'limitations':'仅是给定预算样本点中的非劣集，不是完整连续帕累托前沿；达成率上限为100%'}
     raise ValueError('未知子命令')
+

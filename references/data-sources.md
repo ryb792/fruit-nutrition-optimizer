@@ -5,8 +5,10 @@
 - https://fdc.nal.usda.gov/
 - API 指南：https://fdc.nal.usda.gov/api-guide/
 - CSV 和 JSON 下载：https://fdc.nal.usda.gov/download-datasets/
+- 公开下载文件不需要 API Key；普通用户新增水果优先由 Agent 打开官方网页或下载原始数据，按 [联网查证与导入](web-retrieval.md) 保存证据。API 是独立保留的开发者选项。
 - 本技能内置8条条目，详见 `data/fruits.usda-sr-legacy.snapshot.json` 里的 `record_id` 与 `source.url`；这些都是历史 SR Legacy（April 2018）数据。
 - USDA 不等于中国当地市场的精确品种营养；某些水果需视情况优先使用更相关的本地食物成分条目。
+- `data/web-evidence.mango-tommy-atkins.json` 摘自 2026-04 Foundation 官方 JSON 下载包，FDC 2710833，原始描述为 `Mango, Tommy Atkins, peeled, raw`，访问日期 2026-10-17。能量采用原记录的 Atwater Specific Factors 值；未将另一能量定义平均，也未补齐缺失的糖/叶酸。
 
 ## 中国食物成分查询平台与膳食参考
 
@@ -27,3 +29,4 @@
 
 - USDA `nutrition_per_100g_edible` 不提供用户具体采购商品果皮与果核的实际占比。
 - 内置 yield 与 shelf_days 参数是**模型假设**，在对应条目单独说明；推荐用户实际称重后用 `--yields` 覆盖。
+

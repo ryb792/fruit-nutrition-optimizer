@@ -11,7 +11,7 @@
 基于可追溯的食物成分数据、实际购买价格及营养约束，系统比较水果的单位营养获取成本，识别更经济的替代选择，并优化预算内的水果采购组合。
 
 [![Skill](https://img.shields.io/badge/Skill-Agent%20Skills-7952B3?style=flat-square)](SKILL.md)
-[![Version](https://img.shields.io/badge/Version-v1.1.0-2E7D32?style=flat-square)](RELEASE-NOTES.md)
+[![Version](https://img.shields.io/badge/Version-v1.2.0-2E7D32?style=flat-square)](RELEASE-NOTES.md)
 [![Tests](https://github.com/ryb792/fruit-nutrition-optimizer/actions/workflows/tests.yml/badge.svg)](https://github.com/ryb792/fruit-nutrition-optimizer/actions/workflows/tests.yml)
 [![License](https://img.shields.io/badge/License-MIT-DAA520?style=flat-square)](LICENSE)
 [![USDA FoodData Central](https://img.shields.io/badge/Nutrition-USDA%20FDC-447D61?style=flat-square)](https://fdc.nal.usda.gov/)
@@ -29,6 +29,8 @@
 | **“樱桃降到多少钱值得买？”** | 计算单项营养成本相等时的临界售价 |
 
 可以输入**水果名称**，也可以在支持视觉输入的 AI 环境中**上传水果照片**。照片用于识别品类；营养含量仍须依据食物成分数据库，不会凭照片臆测。
+
+**普通用户无需配置 API 密钥。** 内置条目直接查询；遇到未收录水果，具备联网能力的 Agent 会查找官方公开网页或下载数据，核对品种、单位和可食部后，通过 `import-web` 导入并继续计算。联网检索由 Agent 宿主提供，Python 命令行负责证据校验和数值计算。原有 USDA FDC API 导入继续保留，供开发者按需使用。
 
 ## 分析流程
 
@@ -120,6 +122,7 @@ $$
 ## 数据可信度
 
 - **营养数据：** 内置 8 种常见鲜果的 [USDA FoodData Central](https://fdc.nal.usda.gov/) SR Legacy 历史条目，附 FDC ID 和来源链接；不是用户所买水果的实测值。
+- **免密钥补充：** Agent 可核验官方网页或公开 CSV/JSON，并保存原值、单位、条目定位、访问日期和证据哈希。附带一条来自 USDA 官方下载包的 Tommy Atkins 芒果证据示例，导入后可扩展到 9 条；其他品种需另外查证。步骤与格式见 [联网数据导入](references/web-retrieval.md)。
 - **价格与可食率：** 优先采用可核验的实际售价；当前内置价格仅为**模拟演示**。部分可食率、储存期限是明确标注的规划假设。
 - **适用范围：** 目前仅能在已纳入的水果候选中排名；数据缺失不会被当作零，也不能把营养素直接叠加为未经验证的综合评分。
 
@@ -134,10 +137,11 @@ python -m pip install -r requirements.txt
 python -m pytest tests -q
 ```
 
-当前版本本地自动化测试 **79 项通过**；公网 USDA API 调用和真实照片识别尚未通过端到端环境验证。详见 [测试说明](docs/TESTING.md)。
+当前版本本地自动化测试 **135 项通过**。已验证免密钥下载 USDA 官方公开数据、导入芒果条目并继续查询、对比和优化；详见 [测试说明](docs/TESTING.md)。开发者 FDC API 采用模拟 HTTP 回归测试；真实照片识别尚未通过端到端环境验证。
 
 ## 开源协议
 
 本项目代码采用 [MIT License](LICENSE)。食物成分数据及其他第三方资料遵循各自的数据许可，不能因仓库采用 MIT 而被视为统一授权。欢迎通过 Issue / Pull Request 提供可追溯的数据与修正，参见 [贡献指南](CONTRIBUTING.md)。
 
 *本 Skill 用于营养信息与采购成本分析，不构成医疗诊断或个体化膳食处方。*
+

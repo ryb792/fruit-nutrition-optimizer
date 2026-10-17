@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "source": {
+    "publisher": "USDA Agricultural Research Service",
+    "dataset": "USDA FoodData Central Foundation Foods, April 2026 download",
+    "record_id": "2710833",
+    "url": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2026-04-30.zip",
+    "accessed_on": "2026-10-17",
+    "publication_date": "10/31/2024",
+    "food_description": "Mango, Tommy Atkins, peeled, raw",
+    "food_state": "raw",
+    "edible_portion": "Peeled raw flesh; excludes skin and stone"
+  },
+  "basis": {
+    "amount_g": 100,
+    "portion": "edible"
+  },
+  "nutrients": [
+    {
+      "key": "magnesium_mg",
+      "value": 10.3,
+      "unit": "mg",
+      "source_label": "Magnesium, Mg",
+      "locator": "FoodData_Central_foundation_food_json_2026-04-30.json: FoundationFoods[fdcId=2710833].foodNutrients[nutrient.id=1090].amount"
+    },
+    {
+      "key": "potassium_mg",
+      "value": 165,
+      "unit": "mg",
+      "source_label": "Potassium, K",
+      "locator": "FoodData_Central_foundation_food_json_2026-04-30.json: FoundationFoods[fdcId=2710833].foodNutrients[nutrient.id=1092].amount"
+    },
+    {
+      "key": "vitamin_c_mg",
+      "value": 25.5,
+      "unit": "mg",
+      "source_label": "Vitamin C, total ascorbic acid",
+      "locator": "FoodData_Central_foundation_food_json_2026-04-30.json: FoundationFoods[fdcId=2710833].foodNutrients[nutrient.id=1162].amount"
+    },
+    {
+      "key": "fiber_g",
+      "value": 1.75,
+      "unit": "g",
+      "source_label": "Fiber, total dietary",
+      "locator": "FoodData_Central_foundation_food_json_2026-04-30.json: FoundationFoods[fdcId=2710833].foodNutrients[nutrient.id=1079].amount"
+    },
+    {
+      "key": "vitamin_b6_mg",
+      "value": 0.071,
+      "unit": "mg",
+      "source_label": "Vitamin B-6",
+      "locator": "FoodData_Central_foundation_food_json_2026-04-30.json: FoundationFoods[fdcId=2710833].foodNutrients[nutrient.id=1175].amount"
+    },
+    {
+      "key": "calcium_mg",
+      "value": 12.4,
+      "unit": "mg",
+      "source_label": "Calcium, Ca",
+      "locator": "FoodData_Central_foundation_food_json_2026-04-30.json: FoundationFoods[fdcId=2710833].foodNutrients[nutrient.id=1087].amount"
+    },
+    {
+      "key": "energy_kcal",
+      "value": 61.6,
+      "unit": "kcal",
+      "source_label": "Energy (Atwater Specific Factors)",
+      "locator": "FoodData_Central_foundation_food_json_2026-04-30.json: FoundationFoods[fdcId=2710833].foodNutrients[nutrient.id=2048].amount"
+    }
+  ]
+}

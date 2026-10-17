@@ -11,9 +11,12 @@ dist/
 # Local user data and private inputs
 data/prices.local.json
 data/fruits.custom.json
+data/fruits.local.json
+data/web-evidence.local.json
 *.env
 .env*
 # Output reports
 reports/
 *.log
 .DS_Store
+

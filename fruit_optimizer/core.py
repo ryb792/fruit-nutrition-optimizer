@@ -62,7 +62,10 @@ class Fruit:
 
 
 def load_catalog(path:str|Path)->dict[str,Fruit]:
-    rows=read_json(path)
+    return catalog_from_rows(read_json(path))
+
+def catalog_from_rows(rows)->dict[str,Fruit]:
+    """Validate in memory so an invalid import never replaces an output file."""
     if not isinstance(rows,list) or not rows: raise ValueError('水果目录须为非空数组')
     fruits={}; names={}
     for r in rows:
@@ -244,3 +247,4 @@ def apply_yield_overrides(fruits:dict[str,Fruit],path:str|Path)->dict[str,Fruit]
         result[fid]=replace(f,edible_fraction=yf,waste_fraction=wf,shelf_days=shelf,
            yield_source={'type':'user_override','note':str(r['source_note'])})
     return result
+

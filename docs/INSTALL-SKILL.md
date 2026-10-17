@@ -36,6 +36,9 @@ python -m pytest tests -q
 
 内置营养快照包含 USDA FoodData Central 条目 ID；`data/prices.SIMULATION.json` 是纯模拟报价，不能用于真实采购结论。
 
+普通用户无需配置 `FDC_API_KEY`。未收录水果由具备联网工具的 Agent 查找官方公开网页/下载数据，生成证据并用 `import-web` 导入；联网工具能力由宿主提供。开发者仍可选择 `import-fdc` 接口并自行配置密钥，见 [开发者指南](ADVANCED.md)。
+
 实际价格请按照 `data/prices.template.json` 提供有来源的售价、地区和采集时间，另存为本地文件，避免提交私人采购信息。
 
 更多计算命令见 [开发者与命令行指南](ADVANCED.md)。照片识别依赖所使用的 Agent 是否具备视觉输入能力；本项目 Python 组件不包含独立的视觉识别模型。
+

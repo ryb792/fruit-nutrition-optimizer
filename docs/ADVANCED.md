@@ -1,4 +1,4 @@
-# 水果营养性价比优化器 V1.1（Fruit Nutrition Optimizer）
+# 水果营养性价比优化器 V1.2（Fruit Nutrition Optimizer）
 
 **本文为开发者与命令行高级用法。**普通用户应优先按 [Skill 安装指南](INSTALL-SKILL.md) 在支持的 AI 宿主中安装，通过自然语言使用本技能，无需学习下列命令。数值计算在明确价格、可食率和营养目标后执行。
 
@@ -73,9 +73,24 @@ python -m fruit_optimizer --prices data/prices.local.json rank 钾
 
 `data/targets.EXAMPLE.json` 的维生素C、钾、膳食纤维目标是**数学例题**，不是《中国居民膳食营养素参考摄入量》中的推荐值，也不是医疗建议。设置自己的水果营养目标时必须说明具体来源。
 
-## 在线增补营养条目（可选）
+## 免密钥增补营养条目（普通用户默认路径）
 
-FoodData Central 免费 API 要求 Data.gov API Key，申请地址：<https://fdc.nal.usda.gov/api-guide/>。安装环境需能访问 `api.nal.usda.gov`。不需要联网的基础分析可用内置历史数据。
+本地未收录时，具有搜索/浏览工具的 Agent 打开权威官方条目或下载公开 CSV/JSON，核对原始营养值与食部口径，保存证据 JSON 后调用 `import-web`。普通用户不需要申请 API Key，也不需要手工填写 JSON；证据文件由 Agent 生成。CLI 本身不会搜索网站或解析任意 HTML。
+
+```bash
+python -m fruit_optimizer import-web data/web-evidence.mango-tommy-atkins.json \
+  --id mango_tommy_atkins --name "芒果（Tommy Atkins，去皮生鲜）" \
+  --alias "Tommy Atkins芒果" --edible-fraction 0.70 \
+  --yield-note "演示规划假设70%，实际请称重" --out-catalog data/fruits.local.json
+python -m fruit_optimizer --catalog data/fruits.local.json profile "Tommy Atkins芒果"
+python -m fruit_optimizer --catalog data/fruits.local.json compare "Tommy Atkins芒果" 香蕉 --nutrients 钾 维生素C
+```
+
+详细检索、单位换算、原始证据结构及失败处理见 [联网查证与证据格式](../references/web-retrieval.md)。每次追加使用当前自定义目录作为 `--catalog`，结果写到不同文件；输入目录不被覆盖。导入合并先验证 ID/别名冲突，失败不会损坏已有输出。没有宿主联网工具时，继续使用内置数据或由用户提供可核验的原始资料。
+
+## USDA FDC API（保留的开发者选项）
+
+需要程序直接调用 API 的开发者仍可使用 `import-fdc`。FoodData Central 免费 API 要求 Data.gov API Key，申请地址：<https://fdc.nal.usda.gov/api-guide/>。安装环境需能访问 `api.nal.usda.gov`。这不是普通用户使用 Skill 的前置配置。
 
 ```powershell
 $env:FDC_API_KEY="你的密钥"
@@ -93,10 +108,11 @@ python -m fruit_optimizer import-fdc 173944 --id banana_new --name "新香蕉条
 - **科学意义**：最小化的是约束模型中的买水果成本，不是保证各类营养素都能由水果供给；对健康的收益还涉及整日膳食、吸收、个人状态等复杂因素。
 - **采购精度**：散称模型允许购买任意重量，并假设当日购买食用；整包装模型严格按包装整数计数。包装未吃完的余量单独显示，不一定已经腐坏。订购最低金额、动态阶梯运费、多次平台配送价等尚未建模；可以用每采购日的固定成本近似，但需要明确标注。
 - **视觉**：只有在 ChatGPT / 支持视觉的宿主中才能通过照片识别水果；CLI 不包含视觉模型。我们无法在当前测试环境中对真实相机照片模型准确率做端到端保证。
-- **在线同步**：FDC 接口逻辑采用模拟HTTP单元测试验证，当前运行环境禁止外网访问，因此**没有**实测公网调用成功；需要你在可联网环境验证并保存实际请求日志。
+- **联网验证范围**：免密钥路径已实际下载 USDA 官方 Foundation JSON 并提取、导入、计算；任意动态网页的可读性依赖 Agent 宿主。FDC API 逻辑采用模拟 HTTP 回归测试，未使用真实开发者密钥进行公网 API 验证。
 
 ## 测试与验收
 
 `python -m pytest tests -q` 全部单元与约束测试必须通过。特别包括：营养源ID、价格单位、真假价格区分、过期价格、维生素缺失状态、整数包装与独立穷举证明、日程和保质期、预算限制、目标不可行、最差覆盖率及采购费用校验。
 
 `reports/` 提供两个版本的测试记录、模拟方案与审计输出。详情：`reports/TEST-REPORT.md`。
+
