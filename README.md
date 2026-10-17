@@ -11,7 +11,7 @@
 基于可追溯的食物成分数据、实际购买价格及营养约束，系统比较水果的单位营养获取成本，识别更经济的替代选择，并优化预算内的水果采购组合。
 
 [![Skill](https://img.shields.io/badge/Skill-Agent%20Skills-7952B3?style=flat-square)](SKILL.md)
-[![Version](https://img.shields.io/badge/Version-v1.2.0-2E7D32?style=flat-square)](RELEASE-NOTES.md)
+[![Version](https://img.shields.io/badge/Version-v1.3.0-2E7D32?style=flat-square)](RELEASE-NOTES.md)
 [![Tests](https://github.com/ryb792/fruit-nutrition-optimizer/actions/workflows/tests.yml/badge.svg)](https://github.com/ryb792/fruit-nutrition-optimizer/actions/workflows/tests.yml)
 [![License](https://img.shields.io/badge/License-MIT-DAA520?style=flat-square)](LICENSE)
 [![USDA FoodData Central](https://img.shields.io/badge/Nutrition-USDA%20FDC-447D61?style=flat-square)](https://fdc.nal.usda.gov/)
@@ -117,13 +117,13 @@ $$
 
 > **一周水果预算 30 元，找出三种水果的低成本组合，并说明是否使用了模拟价格。**
 
-**价格说明：** 本 Skill 不会凭空生成实时零售价。请提供可核验的小票、价签或商品报价，或允许使用明确标注的假设情景；两者不得混淆。**精确数值求解需要 Python 及相应依赖与执行权限**，不能仅因 Agent 读取 `SKILL.md` 就宣称计算已经完成。
+**价格说明：** 照片或提问没有可用价格时，Agent 会先互动询问；用户不知道时，再查最近的同地区市场参考价。优先最近7天可核验的零售价，并注明地区、报价日期、来源和“参考价，非实际成交价”。城市不明时先问地区；只有批发价或旧报价时说明限制，不伪装成当前零售价。详见 [询价与近期参考价](references/price-retrieval.md)。**精确数值求解需要 Python 及相应依赖与执行权限**。
 
 ## 数据可信度
 
 - **营养数据：** 内置 8 种常见鲜果的 [USDA FoodData Central](https://fdc.nal.usda.gov/) SR Legacy 历史条目，附 FDC ID 和来源链接；不是用户所买水果的实测值。
 - **免密钥补充：** Agent 可核验官方网页或公开 CSV/JSON，并保存原值、单位、条目定位、访问日期和证据哈希。附带一条来自 USDA 官方下载包的 Tommy Atkins 芒果证据示例，导入后可扩展到 9 条；其他品种需另外查证。步骤与格式见 [联网数据导入](references/web-retrieval.md)。
-- **价格与可食率：** 优先采用可核验的实际售价；当前内置价格仅为**模拟演示**。部分可食率、储存期限是明确标注的规划假设。
+- **价格与可食率：** 优先采用用户实际报价；用户不知道时查询的零售参考价标记为 `reference_retail`。内置数值报价仅为**模拟演示**，不能替代未知价格。部分可食率、储存期限是明确标注的规划假设。
 - **适用范围：** 目前仅能在已纳入的水果候选中排名；数据缺失不会被当作零，也不能把营养素直接叠加为未经验证的综合评分。
 
 详见 [数据来源与许可](DATA-LICENSE.md) 和 [计算规则](references/methodology.md)。
@@ -137,7 +137,7 @@ python -m pip install -r requirements.txt
 python -m pytest tests -q
 ```
 
-当前版本本地自动化测试 **135 项通过**。已验证免密钥下载 USDA 官方公开数据、导入芒果条目并继续查询、对比和优化；详见 [测试说明](docs/TESTING.md)。开发者 FDC API 采用模拟 HTTP 回归测试；真实照片识别尚未通过端到端环境验证。
+当前版本本地自动化测试 **156 项通过**。已验证参考价校验、单位换算、报告标注及免密钥营养数据导入；详见 [测试说明](docs/TESTING.md)。开发者 FDC API 采用模拟 HTTP 回归测试；真实照片识别尚未通过端到端环境验证。
 
 ## 开源协议
 

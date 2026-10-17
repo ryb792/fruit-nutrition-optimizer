@@ -6,6 +6,7 @@ import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 UNITS = {'potassium_mg':'mg','vitamin_c_mg':'mg','vitamin_b6_mg':'mg',
          'fiber_g':'g','magnesium_mg':'mg','energy_kcal':'kcal',
@@ -117,9 +118,30 @@ class Price:
     shipping_cny:float  # shipping of the whole basket must not be counted as per-fruit marginal cost
     @property
     def is_simulated(self)->bool:return self.kind=='simulation'
+    @property
+    def is_reference(self)->bool:return self.kind=='reference_retail'
     def package_cost(self)->float:
         if self.package_kg is None:raise ValueError('散称水果无固定包装成本')
         return self.price_per_kg*self.package_kg
+
+
+def price_context(prices)->dict:
+    """Keep reference/simulated price qualifications attached to every result."""
+    prices=list(prices)
+    reference=any(p.is_reference for p in prices)
+    simulated=any(p.is_simulated for p in prices)
+    labels=[]
+    if reference:labels.append('市场零售参考价，非用户实际成交价；结果仅作参考')
+    if simulated:labels.append('模拟价格/条件性结果')
+    if not labels:labels.append('已录入来源的价格（请核验实际成交价）' if prices else '未提供有效价格')
+    return {'reference_used':reference,'simulation_used':simulated,'notice':'；'.join(labels)}
+
+
+def price_details(price:Price)->dict:
+    return {'price_cny_per_kg':price.price_per_kg,'kind':price.kind,
+            'observed_on':price.observed_on.isoformat() if price.observed_on else None,
+            'location':price.location,'source_url':price.source_url,'source_note':price.source_note,
+            'price_context':price_context([price])}
 
 
 def load_prices(path:str|Path,fruits:dict[str,Fruit],*,as_of:dt.date|None=None,
@@ -136,11 +158,19 @@ def load_prices(path:str|Path,fruits:dict[str,Fruit],*,as_of:dt.date|None=None,
         if fid not in fruits: raise ValueError(f'价格水果无对应营养记录: {fid}')
         if fid in prices:raise ValueError(f'{fid} 多条报价未指定选择策略，拒绝隐式选价')
         kind=str(raw.get('kind','')).strip()
-        if kind not in ('retail','user_receipt','simulation'):
-            raise ValueError(f'{fid} 价格类型须为 retail/user_receipt/simulation')
+        if kind not in ('retail','user_receipt','reference_retail','simulation'):
+            raise ValueError(f'{fid} 价格类型须为 retail/user_receipt/reference_retail/simulation；批发价不可充作零售价')
         if kind=='simulation' and not allow_simulation:
             raise ValueError('模拟价格不可作为实际价格排名；请加 --allow-simulation')
         url=raw.get('source_url'); note=str(raw.get('source_note','')).strip()
+        if kind=='reference_retail':
+            if not isinstance(url,str):raise ValueError(f'{fid}: 参考零售价必须有可打开的来源网址')
+            parts=urlsplit(url)
+            if parts.scheme not in ('http','https') or not parts.hostname or parts.username or parts.password or any(c.isspace() for c in url):
+                raise ValueError(f'{fid}: 参考零售价必须有无登录凭据的完整 HTTP(S) 来源网址')
+            if not isinstance(raw.get('source_note'),str) or not note:
+                raise ValueError(f'{fid}: 参考零售价必须说明零售口径、规格及查询依据')
+            if not isinstance(raw.get('location'),str):raise ValueError(f'{fid}: 参考零售价必须明确地区')
         if kind!='simulation' and not (url or note):
             raise ValueError(f'{fid}: 真实价格至少提供来源网址或收据说明')
         dateval=raw.get('observed_on')
@@ -183,9 +213,7 @@ def profile(fruit:Fruit,price:Price|None=None)->dict:
       'yield_source':fruit.yield_source,'nutrition':fruit.nutrition,
       'units':{k:UNITS[k] for k in fruit.nutrition}}
     if price:
-        result['pricing']={'price_cny_per_kg':price.price_per_kg,'kind':price.kind,
-          'observed_on':price.observed_on.isoformat() if price.observed_on else None,
-          'location':price.location,'source_url':price.source_url,'source_note':price.source_note,
+        result['pricing']={**price_details(price),
           'nutrient_per_cny':{k:nutrient_per_cny(fruit,price,k) for k in fruit.nutrition}}
     return result
 
@@ -202,9 +230,11 @@ def ranking(fruits:dict[str,Fruit],prices:dict[str,Price],nutrient:str)->dict:
            'unit':UNITS[key]+'/元','price_cny_per_kg':prices[f.id].price_per_kg,
            'price_kind':prices[f.id].kind,'nutrition_source':f.source,
            'price_source':{'url':prices[f.id].source_url,'note':prices[f.id].source_note,
+               'location':prices[f.id].location,
                'date':prices[f.id].observed_on.isoformat() if prices[f.id].observed_on else None}})
     entries.sort(key=lambda x:(-x['amount_per_cny'],x['fruit_id']))
     return {'nutrient':key,'ranked':entries,'excluded':excluded,'candidate_count':len(fruits),
+       'price_context':price_context(prices[x['fruit_id']] for x in entries),
        'ranked_count':len(entries),'scope':'仅在已覆盖且有有效价格、营养数据的候选中排名',
        'assumptions':'可食率及额外损耗可能是模型假设；逐项查看水果档案'}
 
@@ -212,6 +242,7 @@ def compare(fruits,prices,a,b,nutrients):
     fa,fb=resolve(fruits,a),resolve(fruits,b)
     keys=[nutrient_key(s) for s in nutrients]
     return {'a':profile(fa,prices.get(fa.id)),'b':profile(fb,prices.get(fb.id)),
+            'price_context':price_context(prices[f.id] for f in (fa,fb) if f.id in prices),
             'nutrient_ranks':{k:[x for x in ranking({fa.id:fa,fb.id:fb},prices,k)['ranked']] for k in keys}}
 
 def substitutes(fruits,prices,fruit_name:str,nutrients:list[str])->dict:
@@ -223,7 +254,8 @@ def substitutes(fruits,prices,fruit_name:str,nutrients:list[str])->dict:
         mine=next((row for row in rank['ranked'] if row['fruit_id']==selected.id),None)
         results[key]={'baseline':mine,'better':[x for x in rank['ranked'] if mine and x['amount_per_cny']>mine['amount_per_cny']*(1+1e-9)],'top':rank['ranked'][:5],
              'baseline_missing_price_or_nutrient':mine is None}
-    return {'selected_fruit':selected.name,'results':results}
+    return {'selected_fruit':selected.name,'results':results,
+            'price_context':price_context(p for fid,p in prices.items() if fid in fruits)}
 
 def apply_yield_overrides(fruits:dict[str,Fruit],path:str|Path)->dict[str,Fruit]:
     """Override yield, non-peel losses, shelf assumption with explicit user evidence."""

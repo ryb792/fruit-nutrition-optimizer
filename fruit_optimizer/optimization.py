@@ -14,7 +14,7 @@ from typing import Any
 import numpy as np
 from scipy.optimize import milp, Bounds, LinearConstraint
 from .core import (Fruit,Price,UNITS,nutrient_key,finite_nonnegative,read_json,
-                   nutrient_per_cny,resolve)
+                   nutrient_per_cny,resolve,price_context,price_details)
 
 
 def pareto_fruits(fruits:dict[str,Fruit],prices:dict[str,Price], nutrients:list[str])->dict:
@@ -27,7 +27,8 @@ def pareto_fruits(fruits:dict[str,Fruit],prices:dict[str,Price], nutrients:list[
         vals=[nutrient_per_cny(f,prices[fid],k) for k in keys]
         if any(v is None for v in vals):
             excluded.append({'fruit':f.name,'reason':'至少一项指定营养数据缺失（没有视为零）'});continue
-        entries.append({'fruit_id':fid,'fruit':f.name,'nutrition_per_cny':dict(zip(keys,vals))})
+        entries.append({'fruit_id':fid,'fruit':f.name,'nutrition_per_cny':dict(zip(keys,vals)),
+                        'pricing':price_details(prices[fid])})
     frontier=[]; dominated=[]
     for a in entries:
         dominators=[]
@@ -40,6 +41,7 @@ def pareto_fruits(fruits:dict[str,Fruit],prices:dict[str,Price], nutrients:list[
                 dominators.append(b['fruit_id'])
         (dominated if dominators else frontier).append({**a,'dominated_by':dominators})
     return {'nutrients':keys,'frontier':frontier,'dominated':dominated,'excluded':excluded,
+            'price_context':price_context(prices[x['fruit_id']] for x in entries),
             'candidate_count':len(fruits),
             'description':'只比较指定营养素每元提供量的帕累托支配；不等于全面健康收益排序'}
 
@@ -53,10 +55,13 @@ def break_even_price(fruits,prices,baseline:str,challenger:str,nutrient:str)->di
     max_price=prices[a.id].price_per_kg*nb*b.yield_fraction/(na*a.yield_fraction)
     actual=prices.get(b.id)
     return {'baseline':a.name,'challenger':b.name,'nutrient':key,
+       'price_context':price_context(prices[f.id] for f in (a,b) if f.id in prices),
        'break_even_challenger_price_cny_per_kg':max_price,
        'challenger_is_more_cost_effective_if':'挑战者价格低于阈值（相等时营养/元相同）',
        'challenger_current_price_cny_per_kg':actual.price_per_kg if actual else None,
        'baseline_price_source':prices[a.id].source_url or prices[a.id].source_note,
+       'baseline_pricing':price_details(prices[a.id]),
+       'challenger_pricing':price_details(actual) if actual else None,
        'formula':'P_b_threshold=P_a*(N_b*effective_yield_b)/(N_a*effective_yield_a)'}
 
 
@@ -269,11 +274,13 @@ def plan(fruits:dict[str,Fruit],prices:dict[str,Price],*,days:int=7,
               'record_id':f.source['record_id'],'dataset':f.source['dataset'],
               'nutrition_source':f.source,'nutrition_url':f.source['url'],
               'edible_yield_basis':f.yield_source,'price_kind':prices[f.id].kind,
+              'price_location':prices[f.id].location,
               'price_date':prices[f.id].observed_on.isoformat() if prices[f.id].observed_on else None,
               'price_source_url':prices[f.id].source_url,'price_source_note':prices[f.id].source_note} for f in selected]
     coverage={k:{'total':total_nutrients[k], 'goal_total':v*days,
                'completion_fraction':total_nutrients[k]/(v*days)} for k,v in targets.items()}
     return {'status':'optimal','objective':objective,'period_days':days,
+        'price_context':price_context(prices[f.id] for f in selected),
         'total_cost_cny':actual_cost,'shopping_days':shopping_days,'trip_fee_cny':trip_fee_cny,'total_trip_fees_cny':extra_trip_cost,'budget_cny':budget_cny,'available_budget_cny':None if budget_cny is None else budget_cny-actual_cost,
         'maximin_fraction':t_opt,'fruit_type_count':len(usedtypes),
         'total_edible_g':sum(x['edible_g'] for x in day_schedules),
@@ -329,6 +336,7 @@ def execute_v11(args,fruits,prices):
                          budget_cny=budget,objective='maximin',min_fruit_types=args.min_types)
                 options.append({'budget_cny':budget,'actual_cost_cny':sol['total_cost_cny'],
                  'maximin_fraction':sol['maximin_fraction'],'fruit_type_count':sol['fruit_type_count'],
+                 'price_context':sol['price_context'],'sources':sol['sources'],
                  'purchases':sol['purchases']})
             except ValueError as e:options.append({'budget_cny':budget,'status':'infeasible','reason':str(e)})
         nondominated=[]
@@ -341,6 +349,7 @@ def execute_v11(args,fruits,prices):
                for y in feasible)
             if not dom:nondominated.append(x)
         return {'samples':options,'sampled_nondominated':nondominated,
+          'price_context':price_context(p for fid,p in prices.items() if fid in fruits),
           'limitations':'仅是给定预算样本点中的非劣集，不是完整连续帕累托前沿；达成率上限为100%'}
     raise ValueError('未知子命令')
 

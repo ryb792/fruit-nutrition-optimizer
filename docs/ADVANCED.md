@@ -1,4 +1,4 @@
-# 水果营养性价比优化器 V1.2（Fruit Nutrition Optimizer）
+# 水果营养性价比优化器 V1.3（Fruit Nutrition Optimizer）
 
 **本文为开发者与命令行高级用法。**普通用户应优先按 [Skill 安装指南](INSTALL-SKILL.md) 在支持的 AI 宿主中安装，通过自然语言使用本技能，无需学习下列命令。数值计算在明确价格、可食率和营养目标后执行。
 
@@ -62,14 +62,16 @@ python -m fruit_optimizer --yields data/yields.template.json profile 香蕉
 - `measure: jin`：每市斤（500g）多少元；
 - `measure: pack`：整包装多少元，必须给 `package_kg`；
 - 如果是整盒不可拆卖，即使报价为 `kg` 仍可填写 `package_kg` 表示只能整包采购；
-- 零售 `kind=retail`，实际小票 `kind=user_receipt`，模拟价格 `kind=simulation`；
+- 用户提供的零售 `kind=retail`，实际小票 `kind=user_receipt`，联网备用零售参考价 `kind=reference_retail`，模拟价格 `kind=simulation`；
 - `observed_on` 为 `YYYY-MM-DD`；`source_url` 或 `source_note` 必填；`location` 必填。
 
 ```powershell
 python -m fruit_optimizer --prices data/prices.local.json rank 钾
 ```
 
-日期超过7天会提示拒绝；只有用户明确接受旧价格作参考时才使用 `--allow-stale`。跨地区报价默认不能混比。**系统不会自动获取未验证的实时零售价。** 本地价格模板 `amount_cny=0` 是待填写值，不能直接作为零售价运行。
+照片/文字无价格时，宿主 Agent 先互动询问价格与缺少的单位、地区；用户不知道时自动搜索近期当地参考零售价，详见 [询价与参考价](../references/price-retrieval.md)。使用 `data/prices.reference.template.json` 录入，`reference_retail` 要求来源 URL、备注、原始报价日期和地区；不需要 `--allow-simulation`。查询和计算由宿主与 CLI 配合完成，CLI 自身不搜索或弹出对话。
+
+日期超过7天会提示拒绝；只有用户明确接受旧价格作参考时才使用 `--allow-stale`。不能用访问日期刷新旧报价。跨地区报价默认不能混比，批发价不能默认用于零售模型。两份模板的 `amount_cny=0` 和日期占位都是待填写值，不能直接计算。参考价结果会在 JSON/Markdown 保留参考标记、地区、日期和来源。
 
 `data/targets.EXAMPLE.json` 的维生素C、钾、膳食纤维目标是**数学例题**，不是《中国居民膳食营养素参考摄入量》中的推荐值，也不是医疗建议。设置自己的水果营养目标时必须说明具体来源。
 

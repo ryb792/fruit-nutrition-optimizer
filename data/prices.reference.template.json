@@ -1,0 +1,17 @@
+{
+  "disclaimer": "待填写模板，不含真实价格；由 Agent 实际打开近期零售来源后填写",
+  "offers": [
+    {
+      "fruit_id": "banana",
+      "amount_cny": 0,
+      "measure": "kg",
+      "location": "请填来源对应的城市/地区",
+      "kind": "reference_retail",
+      "observed_on": "请填原始报价日期 YYYY-MM-DD",
+      "source_url": "https://example.invalid/replace-with-original-retail-source",
+      "source_note": "请填零售口径、品种规格、原始价格单位、统计周期/商品限制及查询日期",
+      "package_kg": null,
+      "shipping_cny": 0
+    }
+  ]
+}

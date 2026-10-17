@@ -9,7 +9,7 @@ from pathlib import Path
 from requests.exceptions import RequestException
 from . import __version__
 from .core import (load_catalog,load_prices,profile,resolve,compare,ranking,substitutes,
-                   nutrient_key,read_json,apply_yield_overrides)
+                   nutrient_key,read_json,apply_yield_overrides,price_context)
 from .fdc import fetch_fdc,import_fdc_record
 from .evidence import import_web_record,append_catalog,read_web_evidence
 
@@ -68,7 +68,7 @@ def render_md(data):
           f"- 优化目标：{data['objective']}；状态：已证明最优（仅限当前候选与约束）",
           f"- 规划周期：{data['period_days']} 天；总成本：¥{data['total_cost_cny']:.2f}",
           f"- 涉及水果：{data['fruit_type_count']}种；总可食重量：{data['total_edible_g']:.1f}g",
-          f"- 价格类型：{'模拟价格/条件性结果' if any(x['price_kind']=='simulation' for x in data['sources']) else '已录入来源的价格（请自行核验）'}",'']
+          f"- 价格类型：{data['price_context']['notice']}",'']
         if data['budget_cny'] is not None:lines.append(f"- 预算：¥{data['budget_cny']:.2f}；余量：¥{data['available_budget_cny']:.2f}")
         if data['maximin_fraction'] is not None:lines.append(f"- 最差营养目标覆盖率：{data['maximin_fraction']:.2%}")
         lines+=['','## 每日食用方案','','| 第几天 | 实际可食重量 | 水果组合 |','|---:|---:|---|']
@@ -86,6 +86,7 @@ def render_md(data):
         lines+=['','## 证据与假设','']
         for src in data['sources']:
             lines.append(f"- {src['fruit_id']}：{src['dataset']} 条目 {src['record_id']} {src['nutrition_url']}；价格类别 {src['price_kind']}；可食率：{src['edible_yield_basis']['type']}")
+            lines.append(f"  价格：{src['price_location']}，{src['price_date']}；{src['price_source_url'] or src['price_source_note']}")
         lines+=['','## 限制条件','']+[f'- {v}' for v in data['warnings']]
         return '\n'.join(lines)+'\n'
     if isinstance(data,dict) and 'nutrition' in data and 'fruit' in data:
@@ -95,11 +96,15 @@ def render_md(data):
             lines.append(f'| {k} | {"未知" if v is None else str(v)+" "+data["units"][k]} |')
         if 'pricing' in data:
             p=data['pricing'];lines+=['',f"价格：¥{p['price_cny_per_kg']}/kg，类型：{p['kind']}，地区：{p['location']}，日期：{p['observed_on']}"]
+            lines += [p['price_context']['notice'],f"价格来源：{p['source_url'] or p['source_note']}"]
         return '\n'.join(lines)+'\n'
     if isinstance(data,dict) and 'ranked' in data:
-        lines=[f"# {data['nutrient']} 性价比排行",'',f"范围：{data['scope']}",'','| 名次 | 水果 | 营养/元 | 每kg价 |','|---:|---|---:|---:|']
+        lines=[f"# {data['nutrient']} 性价比排行",'',f"范围：{data['scope']}",data['price_context']['notice'],'','| 名次 | 水果 | 营养/元 | 每kg价 |','|---:|---|---:|---:|']
         for i,r in enumerate(data['ranked'],1):
             lines.append(f"| {i} | {r['fruit']} | {r['amount_per_cny']:.4g} {r['unit']} | ¥{r['price_cny_per_kg']:.2f} |")
+        for r in data['ranked']:
+            p=r['price_source']
+            lines+=['',f"- {r['fruit']}：{r['price_kind']}，{p['location']}，{p['date']}；{p['url'] or p['note']}"]
         return '\n'.join(lines)+'\n'
     return '```json\n'+json.dumps(data,indent=2,ensure_ascii=False,allow_nan=False)+'\n```\n'
 
@@ -123,6 +128,7 @@ def execute(args):
           allow_stale=args.allow_stale,allow_mixed_regions=args.allow_mixed_regions) if args.prices else {}
     if args.command=='validate':
         return {'status':'ok','fruits_count':len(fruits),'prices_count':len(prices),
+            'price_context':price_context(prices.values()),
             'nutrient_sources':[x.source['url'] for x in fruits.values()],
             'simulation_used':any(p.is_simulated for p in prices.values())}
     if args.command=='profile': return profile(resolve(fruits,args.fruit),prices.get(resolve(fruits,args.fruit).id))

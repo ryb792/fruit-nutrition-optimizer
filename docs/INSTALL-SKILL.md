@@ -40,5 +40,7 @@ python -m pytest tests -q
 
 实际价格请按照 `data/prices.template.json` 提供有来源的售价、地区和采集时间，另存为本地文件，避免提交私人采购信息。
 
+照片或提问没有可用价格时，技能会先互动询问；用户不知道时，由具备联网工具的宿主搜索近期同地区市场参考价。参考零售价使用 `data/prices.reference.template.json` 的 `reference_retail` 类型，输出会保留报价日期、地区、来源及参考性质。交互与检索依赖宿主能力，纯 CLI 不会自动弹出询价。
+
 更多计算命令见 [开发者与命令行指南](ADVANCED.md)。照片识别依赖所使用的 Agent 是否具备视觉输入能力；本项目 Python 组件不包含独立的视觉识别模型。
 
